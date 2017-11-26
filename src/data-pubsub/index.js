@@ -38,7 +38,7 @@ exports['data-pubsub'] = async function (event, callback) {
 
 	try {
 		if (data.timestamp)
-			data.timestamp = new Date(data.timestamp)
+			data.timestamp = new Date(data.timestamp * 1000)
 		await new Data(data).save()
 	} catch (err) {
 		console.error('create', err)
