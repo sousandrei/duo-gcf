@@ -37,7 +37,6 @@ async function main() {
 
 	let dates = [fakeData()]
 
-	let i = 0
 	while (dates[dates.length - 1].timestamp < moment()) {
 		dates.push(fakeData())
 		if (dates.length == 100) {
@@ -47,27 +46,10 @@ async function main() {
 		}
 	}
 
+	console.log('populou')
+
 	await mongoose.disconnect()
 }
 
-
-async function firebase_cloud_messaging() {
-	//firebase
-
-	// databaseURL: 'https://<DATABASE_NAME>.firebaseio.com',
-	// storageBucket: '<BUCKET>.appspot.com',
-	const firebase = require('firebase')
-
-	firebase.initializeApp({
-		apiKey: 'AAAAylAQdf8:APA91bFDH6822LlUxWn11vGPtKEZeMf6S9sUqxf9DB76-Bo' +
-		'0FjO5q7wSFIRVl7Q8SrgfrWrmqP4Q6qtD_rH3L6LoKz1ya1aUxEeWtSgSIDEw3pAiIt' +
-		'm9znXL-PNXFYYULyqEvWbkAzWj',
-		authDomain: 'monkey-735a9.firebaseapp.com',
-		messagingSenderId: '868926649855',
-	})
-
-	console.log(firebase)
-
-}
-module.exports = firebase_cloud_messaging()
+module.exports = main()
 

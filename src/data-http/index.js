@@ -2,9 +2,6 @@
 
 require('dotenv').config()
 
-console.log(process.ENV)
-process.exit(0)
-
 const mongoose = require('mongoose')
 mongoose.Promise = global.Promise
 
@@ -15,14 +12,7 @@ process.on('unhandledRejection', (reason, promise) => {
 	console.error(reason, promise)
 })
 
-
-/**
- * Cloud Function.
- *
- * @param {object} event The Cloud Functions event.
- * @param {function} callback The callback function.
- */
-exports.data = async (req, res) => {
+exports['data-http'] = async (req, res) => {
 
 	//testing
 	res.set('Access-Control-Allow-Origin', '*')
@@ -30,17 +20,11 @@ exports.data = async (req, res) => {
 
 	try {
 		global.DB = await mongoose.connect(process.env.MONGO_URL,
-			{ useMongoClient: true })
+			{ useMongoClient: true, autoIndex: false })
 
 		switch (req.method) {
 			case 'GET':
 				await handleGET(req, res)
-				break
-			case 'POST':
-				await handlePOST(req, res)
-				break
-			case 'LINK':
-				await handleLINK(req, res)
 				break
 			default:
 				res.status(409).end()
@@ -67,30 +51,14 @@ async function handleGET(req, res) {
 		if (req.query.last)
 			return await last(req, res)
 
-		return res.status(400).end('escolha uma operacao')
+		return res.status(400).end('groupBy query missing,'
+			+ 'choose "day" or "month"')
 	} catch (err) {
 		console.error('get', err)
 		return res.status(500).json(err)
 	}
 
 }
-
-async function handlePOST(req, res) {
-	try {
-		let item = await new Data(req.body).save()
-		return res.status(200).json(item)
-	} catch (err) {
-		console.error('post', err)
-		return res.status(500).json(err)
-	}
-}
-
-async function handleLINK(req, res) {
-	// porra firebase
-
-	res.status(200).end()
-}
-
 
 async function count(req, res) {
 	let count = await Data.count()
