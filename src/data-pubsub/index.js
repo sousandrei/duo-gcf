@@ -29,8 +29,7 @@ exports['data-pubsub'] = async function (event, callback) {
 	}
 
 	try {
-		await mongoose.connect(process.env.MONGO_URL,
-			{ useMongoClient: true, autoIndex: false })
+		await mongoose.connect(process.env.MONGO_URL)
 	} catch (err) {
 		console.error('connect', err)
 		return callback()
