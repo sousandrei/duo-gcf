@@ -1,8 +1,9 @@
 const mongoose = require('mongoose')
 
 let dataSchema = mongoose.Schema({
-	amps: Number,
-	volts: Number,
+	irms: Number,
+	tensao: Number,
+	potencia: Number,
 	timestamp: Date,
 })
 

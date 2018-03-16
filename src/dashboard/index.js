@@ -48,24 +48,32 @@ exports['dashboard'] = async (req, res) => {
 async function handleGET(req, res) {
 	try {
 		const [
-			instant,
+			last,
+			day,
 			week,
 			month,
-			last
+			semester
 		] =
 			await Promise.all(
 				[
+					lastData(),
 					lastDay(),
 					lastWeek(),
-					lastMonths(),
-					lastData()
+					lastMonth(),
+					lastSemester(),
 				])
 
 		return res.json({
-			instant,
+			day,
 			week,
 			month,
-			last
+			semester,
+			last: {
+				amps: last.irms,
+				volts: last.tensao,
+				watts: last.potencia,
+				timestamp: last.timestamp
+			}
 		})
 
 	} catch (err) {
@@ -94,8 +102,9 @@ function lastDay() {
 			day: { $dayOfMonth: '$timestamp' },
 			hour: { $hour: '$timestamp' }
 		},
-		amps: { $avg: '$amps' },
-		volts: { $avg: '$volts' }
+		amps: { $avg: '$irms' },
+		volts: { $avg: '$tensao' },
+		watts: { $sum: '$potencia' }
 	}
 
 	return aggregate(match, group)
@@ -109,16 +118,35 @@ function lastWeek() {
 		_id: {
 			year: { $year: '$timestamp' },
 			month: { $month: '$timestamp' },
-			day: { $dayOfMonth: '$timestamp' }
+			day: { $dayOfWeek: '$timestamp' }
 		},
-		amps: { $avg: '$amps' },
-		volts: { $avg: '$volts' }
+		amps: { $avg: '$irms' },
+		volts: { $avg: '$tensao' },
+		watts: { $sum: '$potencia' }
 	}
 
 	return aggregate(match, group)
 }
 
-function lastMonths() {
+function lastMonth() {
+	const date = new Date(year, month, 1)
+
+	const match = { timestamp: { $gt: date } }
+	const group = {
+		_id: {
+			year: { $year: '$timestamp' },
+			month: { $month: '$timestamp' },
+			day: { $dayOfMonth: '$timestamp' }
+		},
+		amps: { $avg: '$irms' },
+		volts: { $avg: '$tensao' },
+		watts: { $sum: '$potencia' }
+	}
+
+	return aggregate(match, group)
+}
+
+function lastSemester() {
 	let date
 
 	if (month <= 5)
@@ -132,8 +160,9 @@ function lastMonths() {
 			year: { $year: '$timestamp' },
 			month: { $month: '$timestamp' }
 		},
-		amps: { $avg: '$amps' },
-		volts: { $avg: '$volts' }
+		amps: { $avg: '$irms' },
+		volts: { $avg: '$tensao' },
+		watts: { $sum: '$potencia' }
 	}
 
 	return aggregate(match, group)
@@ -145,6 +174,6 @@ function aggregate(match, group) {
 		.aggregate()
 		.match(match)
 		.group(group)
-		.sort('_id')
+		.sort('-_id')
 		.exec()
 }

@@ -29,15 +29,15 @@ exports['data-pubsub'] = async function (event, callback) {
 	}
 
 	try {
-		await mongoose.connect(process.env.MONGO_URL)
+		await mongoose.connect(process.env.MONGO_URL,
+			{ autoIndex: false, useMongoClient: true })
 	} catch (err) {
 		console.error('connect', err)
 		return callback()
 	}
 
 	try {
-		if (data.timestamp)
-			data.timestamp = new Date(data.timestamp * 1000)
+		data.timestamp = new Date()
 		await new Data(data).save()
 	} catch (err) {
 		console.error('create', err)

@@ -9,7 +9,8 @@
 		"deploy-local": "functions deploy dashboard --trigger-http",
 		"debug-babel": "npm run babel && npm run deploy-local-babel && functions inspect dashboard",
 		"debug": "npm run deploy-local && functions inspect dashboard",
-		"deploy": "npm run babel && (cd lib/ && gcloud beta functions deploy dashboard --stage-bucket akts-monkey --trigger-http)"
+		"deploy": "npm run babel && (cd lib/ && gcloud beta functions deploy dashboard --stage-bucket akts-monkey --trigger-http)",
+		"populate": "node scripts/populate"
 	},
 	"dependencies": {
 		"dotenv": "^4.0.0",

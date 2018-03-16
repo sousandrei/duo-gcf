@@ -15,13 +15,21 @@ process.on('unhandledRejection', (reason, promise) => {
 	console.error(reason, promise)
 })
 
-let date = moment('2018-01-01T00:00:00.000Z')
+let date = moment('2018-02-01T00:00:00.000Z')
 
 function fakeData() {
+	const amps = faker.random.number({ min: 0, max: 100 }) + Math.random()
+	const volts = faker.random.number({ min: 210, max: 230 }) + Math.random()
+
+	const watts = amps * volts * 10
+
+	const timestamp = date.toISOString()
+
 	return {
-		amps: faker.random.number({ min: 0, max: 100 }) + Math.random(),
-		volts: faker.random.number({ min: 210, max: 230 }) + Math.random(),
-		timestamp: date.toISOString()
+		irms: amps,
+		tensao: volts,
+		potencia: watts,
+		timestamp
 	}
 }
 
