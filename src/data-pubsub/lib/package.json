@@ -5,8 +5,8 @@
 	"main": "index.js",
 	"scripts": {
 		"babel": "babel *.js -d lib/",
-		"deploy-local-babel": "(cd lib/ && functions deploy data-pubsub  --trigger-resource new_data --trigger-event google.pubsub.topic.publish)",
-		"deploy-local": "functions deploy data-pubsub  --trigger-resource new_data --trigger-event google.pubsub.topic.publish",
+		"deploy-local-babel": "(cd lib/ && functions deploy data-pubsub --trigger-topic new_data)",
+		"deploy-local": "functions deploy data-pubsub --trigger-topic new_data",
 		"debug-babel": "npm run babel && npm run deploy-local-babel && functions inspect data-pubsub",
 		"debug": "npm run deploy-local && functions inspect data-pubsub",
 		"deploy": "npm run babel && (cd lib/ && gcloud beta functions deploy data-pubsub --trigger-resource new_data --trigger-event google.pubsub.topic.publish)"

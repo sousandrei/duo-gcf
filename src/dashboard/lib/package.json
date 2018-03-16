@@ -1,0 +1,35 @@
+{
+	"name": "public-server",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"babel": "babel *.js -d lib/",
+		"deploy-local-babel": "(cd lib/ && functions deploy dashboard --trigger-http)",
+		"deploy-local": "functions deploy dashboard --trigger-http",
+		"debug-babel": "npm run babel && npm run deploy-local-babel && functions inspect dashboard",
+		"debug": "npm run deploy-local && functions inspect dashboard",
+		"deploy": "npm run babel && (cd lib/ && gcloud beta functions deploy dashboard --stage-bucket akts-monkey --trigger-http)",
+		"populate": "node scripts/populate"
+	},
+	"dependencies": {
+		"dotenv": "^4.0.0",
+		"faker": "^4.1.0",
+		"moment": "^2.19.1",
+		"mongodb": "^3.0.2",
+		"mongoose": "^5.0.5"
+	},
+	"babel": {
+		"plugins": [
+			"transform-async-to-generator"
+		],
+		"presets": [
+			"node6"
+		]
+	},
+	"devDependencies": {
+		"babel-cli": "^6.26.0",
+		"babel-plugin-transform-async-to-generator": "^6.24.1",
+		"babel-preset-node6": "^11.0.0"
+	}
+}

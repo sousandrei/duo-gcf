@@ -104,7 +104,7 @@ function lastDay() {
 		},
 		amps: { $avg: '$irms' },
 		volts: { $avg: '$tensao' },
-		watts: { $sum: '$potencia' }
+		watts: { $avg: '$potencia' }
 	}
 
 	return aggregate(match, group)
@@ -122,7 +122,7 @@ function lastWeek() {
 		},
 		amps: { $avg: '$irms' },
 		volts: { $avg: '$tensao' },
-		watts: { $sum: '$potencia' }
+		watts: { $avg: '$potencia' }
 	}
 
 	return aggregate(match, group)
@@ -140,7 +140,7 @@ function lastMonth() {
 		},
 		amps: { $avg: '$irms' },
 		volts: { $avg: '$tensao' },
-		watts: { $sum: '$potencia' }
+		watts: { $avg: '$potencia' }
 	}
 
 	return aggregate(match, group)
@@ -162,7 +162,7 @@ function lastSemester() {
 		},
 		amps: { $avg: '$irms' },
 		volts: { $avg: '$tensao' },
-		watts: { $sum: '$potencia' }
+		watts: { $avg: '$potencia' }
 	}
 
 	return aggregate(match, group)
